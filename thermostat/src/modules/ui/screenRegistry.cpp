@@ -3,11 +3,13 @@
 static HomeScreen homeScreen;
 static SettingsScreen settingsScreen;
 static SetpointScreen setpointScreen;
+static HvacModeSelectScreen hvacModeSelectScreen;
 
 Screen* const screenTable[static_cast<size_t>(ScreenId::Count)] = {
     &homeScreen,
     &settingsScreen,
-    &setpointScreen
+    &setpointScreen,
+    &hvacModeSelectScreen
 };
 
 ScreenId screens_that_need_global_topbar[] = {

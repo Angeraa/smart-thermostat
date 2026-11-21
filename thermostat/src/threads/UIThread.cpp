@@ -231,7 +231,7 @@ void UIThread::run() {
                 case UIEventId::SwitchScreen: {
                     auto idx = static_cast<size_t>(event.value);
                     if (idx < screenCount) {
-                        screenManager.set(static_cast<ScreenId>(idx));
+                        screenManager.set(static_cast<ScreenId>(idx), config.snapshot());
                     }
                     break;
                 }
