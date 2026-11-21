@@ -27,6 +27,7 @@ enum class ScreenId : size_t {
     Home = 0,
     Settings,
     Setpoint,
+    HvacModeSelect,
     // Sensors,
     // AirQuality,
     // Settings, current Settings changes to Menu

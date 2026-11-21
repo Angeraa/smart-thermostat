@@ -20,8 +20,7 @@ static void onmenuButtonClicked(lv_event_t*) {
 }
 
 static void onhvacModeButtonClicked(lv_event_t*) {
-    // Will actually switch to a specific screen to pick the HVAC state, but for now just switch to the settings screen
-    postUIEvent({UIEventId::SwitchScreen, static_cast<int>(ScreenId::Settings)});
+    postUIEvent({UIEventId::SwitchScreen, static_cast<int>(ScreenId::HvacModeSelect)});
 }
 
 static void onheatSetpointButtonClicked(lv_event_t* e) {
@@ -57,7 +56,7 @@ void HomeScreen::create(lv_obj_t* root) {
 
     lv_obj_t* topbar = lv_obj_create(content);
     lv_obj_set_size(topbar, LV_PCT(100), 75);
-    lv_obj_set_style_pad_all(topbar, 0, 0);
+    lv_obj_set_style_pad_all(topbar, 5, 0);
     lv_obj_set_style_bg_opa(topbar, LV_OPA_TRANSP, 0);
     lv_obj_set_style_border_width(topbar, 0, 0);
     lv_obj_set_style_radius(topbar, 0, 0);
@@ -82,6 +81,7 @@ void HomeScreen::create(lv_obj_t* root) {
     lv_obj_set_style_bg_opa(hvacModeButton, LV_OPA_TRANSP, 0);
     lv_obj_set_style_shadow_width(hvacModeButton, 0, 0);
     lv_obj_align(hvacModeButton, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_add_event_cb(hvacModeButton, onhvacModeButtonClicked, LV_EVENT_CLICKED, nullptr);
 
     modeLabel = lv_label_create(hvacModeButton);
     lv_obj_set_style_text_color(modeLabel, lv_color_hex(COLOR_TEXT_MAIN), 0);

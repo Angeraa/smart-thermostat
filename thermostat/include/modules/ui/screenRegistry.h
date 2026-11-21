@@ -4,5 +4,6 @@
 #include "modules/ui/screens/HomeScreen.h"
 #include "modules/ui/screens/SettingsScreen.h"
 #include "modules/ui/screens/SetpointScreen.h"
+#include "modules/ui/screens/HvacModeSelectScreen.h"
 
 extern Screen* const screenTable[static_cast<size_t>(ScreenId::Count)];

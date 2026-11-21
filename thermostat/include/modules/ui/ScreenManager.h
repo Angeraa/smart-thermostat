@@ -9,6 +9,7 @@ class ScreenManager {
 public:
     void init();
     void set(ScreenId id);
+    void set(ScreenId id, const AppState& appState);
     void back();
     void update(const AppState& appState);
 

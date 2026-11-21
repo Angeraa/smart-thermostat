@@ -40,7 +40,28 @@ void ScreenManager::set(ScreenId id) {
             return;
         }
     }
+    screenTable[toIndex(screenStack[stackPointer])]->hide();
+    stackPointer++;
+    screenStack[stackPointer] = id;
+    screenTable[toIndex(screenStack[stackPointer])]->show();
+}
 
+void ScreenManager::set(ScreenId id, const AppState& appState) {
+    if (id == screenStack[stackPointer]) return;
+    if (toIndex(id) >= screenCount) return;
+
+    for (int i = stackPointer; i >= 0; i--) {
+        if (screenStack[i] == id) {
+            // Pre update the screen before showing it again in the case of cross-screen updates
+            screenTable[toIndex(screenStack[i])]->update(appState);
+            screenTable[toIndex(screenStack[stackPointer])]->hide();
+            stackPointer = i;
+            screenTable[toIndex(screenStack[stackPointer])]->show();
+            return;
+        }
+    }
+    // Update the new screen with the provided app state
+    screenTable[toIndex(id)]->update(appState);
     screenTable[toIndex(screenStack[stackPointer])]->hide();
     stackPointer++;
     screenStack[stackPointer] = id;
