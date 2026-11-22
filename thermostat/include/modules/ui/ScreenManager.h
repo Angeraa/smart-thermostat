@@ -25,4 +25,7 @@ private:
     lv_obj_t* root = nullptr;
     uint8_t stackPointer = 0;
     ScreenId screenStack[MAX_SCREEN_STACK_DEPTH] = {ScreenId::Home};
+
+    // Global Topbar for certain screens
+    lv_obj_t* topbar = nullptr;
 };

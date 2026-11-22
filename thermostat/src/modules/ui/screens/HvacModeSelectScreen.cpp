@@ -1,5 +1,6 @@
 #include "modules/ui/screens/HvacModeSelectScreen.h"
 #include "modules/ui/ui_events.h"
+#include "utils/ui_prefabs.h"
 
 void onAutoButtonClick(lv_event_t *e) {
     postUIEvent({UIEventId::HvacModeChanged, static_cast<int>(HvacMode::AUTO)});
@@ -42,53 +43,29 @@ void HvacModeSelectScreen::create(lv_obj_t *root) {
     lv_obj_set_style_radius(buttonContainer, 25, 0);
     lv_obj_set_style_bg_opa(buttonContainer, LV_OPA_TRANSP, 0);
 
-    autoButton = lv_btn_create(buttonContainer);
-    lv_obj_set_size(autoButton, lv_pct(100), 100);
+    autoButton = createButton(buttonContainer, "Auto", LV_PCT(100), 100, &lv_font_montserrat_32, onAutoButtonClick, nullptr, &autoLabel);
     lv_obj_align(autoButton, LV_ALIGN_CENTER, -150, -50);
-    lv_obj_add_event_cb(autoButton, onAutoButtonClick, LV_EVENT_CLICKED, NULL);
     lv_obj_set_style_bg_color(autoButton, lv_color_hex(COLOR_BACKGROUND), LV_PART_MAIN);
     lv_obj_set_style_border_width(autoButton, 0, LV_PART_MAIN);
-    autoLabel = lv_label_create(autoButton);
-    lv_label_set_text(autoLabel, "Auto");
     lv_obj_set_style_text_color(autoLabel, lv_color_hex(COLOR_TEXT_MAIN), LV_PART_MAIN);
-    lv_obj_set_style_text_font(autoLabel, &lv_font_montserrat_32, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_center(autoLabel);
 
-    heatButton = lv_btn_create(buttonContainer);
-    lv_obj_set_size(heatButton, lv_pct(100), 100);
+    heatButton = createButton(buttonContainer, "Heat", LV_PCT(100), 100, &lv_font_montserrat_32, onHeatButtonClick, nullptr, &heatLabel);
     lv_obj_align(heatButton, LV_ALIGN_CENTER, 150, -50);
-    lv_obj_add_event_cb(heatButton, onHeatButtonClick, LV_EVENT_CLICKED, NULL);
     lv_obj_set_style_bg_color(heatButton, lv_color_hex(COLOR_BACKGROUND), LV_PART_MAIN);
     lv_obj_set_style_border_width(heatButton, 0, LV_PART_MAIN);
-    heatLabel = lv_label_create(heatButton);
-    lv_label_set_text(heatLabel, "Heat");
     lv_obj_set_style_text_color(heatLabel, lv_color_hex(COLOR_TEXT_MAIN), LV_PART_MAIN);
-    lv_obj_set_style_text_font(heatLabel, &lv_font_montserrat_32, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_center(heatLabel);
 
-    coolButton = lv_btn_create(buttonContainer);
-    lv_obj_set_size(coolButton, lv_pct(100), 100);
+    coolButton = createButton(buttonContainer, "Cool", LV_PCT(100), 100, &lv_font_montserrat_32, onCoolButtonClick, nullptr, &coolLabel);
     lv_obj_align(coolButton, LV_ALIGN_CENTER, -150, 50);
-    lv_obj_add_event_cb(coolButton, onCoolButtonClick, LV_EVENT_CLICKED, NULL);
     lv_obj_set_style_bg_color(coolButton, lv_color_hex(COLOR_BACKGROUND), LV_PART_MAIN);
     lv_obj_set_style_border_width(coolButton, 0, LV_PART_MAIN);
-    coolLabel = lv_label_create(coolButton);
-    lv_label_set_text(coolLabel, "Cool");
     lv_obj_set_style_text_color(coolLabel, lv_color_hex(COLOR_TEXT_MAIN), LV_PART_MAIN);
-    lv_obj_set_style_text_font(coolLabel, &lv_font_montserrat_32, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_center(coolLabel);
 
-    offButton = lv_btn_create(buttonContainer);
-    lv_obj_set_size(offButton, lv_pct(100), 100);
+    offButton = createButton(buttonContainer, "Off", LV_PCT(100), 100, &lv_font_montserrat_32, onOffButtonClick, nullptr, &offLabel);
     lv_obj_align(offButton, LV_ALIGN_CENTER, 150, 50);
-    lv_obj_add_event_cb(offButton, onOffButtonClick, LV_EVENT_CLICKED, NULL);
     lv_obj_set_style_bg_color(offButton, lv_color_hex(COLOR_BACKGROUND), LV_PART_MAIN);
     lv_obj_set_style_border_width(offButton, 0, LV_PART_MAIN);
-    offLabel = lv_label_create(offButton);
-    lv_label_set_text(offLabel, "Off");
     lv_obj_set_style_text_color(offLabel, lv_color_hex(COLOR_TEXT_MAIN), LV_PART_MAIN);
-    lv_obj_set_style_text_font(offLabel, &lv_font_montserrat_32, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_center(offLabel);
 
     created = true;
 }

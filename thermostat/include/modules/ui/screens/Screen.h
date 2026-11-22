@@ -10,6 +10,8 @@ constexpr uint32_t COLOR_TEXT_MAIN = 0xFFFFFFFF;
 constexpr uint32_t COLOR_COOLING = 0xFF2E7EFF;
 constexpr uint32_t COLOR_HEATING = 0xFFC26D1E;
 
+constexpr int32_t MENU_TOPBAR_HEIGHT = 100;
+
 class Screen {
 public:
     virtual ~Screen() = default;

@@ -1,6 +1,49 @@
 #include "modules/ui/ScreenManager.h"
 #include "modules/ui/screenRegistry.h"
 #include "utils/logging.h"
+#include "utils/ui_prefabs.h"
+#include "modules/ui/ui_events.h"
+#include <algorithm>
+
+lv_obj_t* createTopbar(lv_obj_t* parent) {
+    lv_obj_t* topbar = lv_obj_create(parent);
+    lv_obj_set_size(topbar, LV_PCT(100), MENU_TOPBAR_HEIGHT);
+    lv_obj_set_pos(topbar, 0, 0);
+    lv_obj_move_foreground(topbar);
+    lv_obj_set_style_layout(topbar, LV_LAYOUT_FLEX, 0);
+    lv_obj_set_style_flex_flow(topbar, LV_FLEX_FLOW_ROW, 0);
+    lv_obj_set_style_flex_main_place(topbar, LV_FLEX_ALIGN_SPACE_BETWEEN, 0);
+    lv_obj_set_style_flex_cross_place(topbar, LV_FLEX_ALIGN_CENTER, 0);
+    lv_obj_set_style_flex_track_place(topbar, LV_FLEX_ALIGN_CENTER, 0);
+    lv_obj_set_style_pad_all(topbar, 15, 0);
+    lv_obj_set_style_bg_opa(topbar, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_border_width(topbar, 0, 0);
+    lv_obj_set_style_radius(topbar, 0, 0);
+    lv_obj_remove_flag(topbar, LV_OBJ_FLAG_SCROLLABLE);
+
+    // Menu Buttons
+    lv_obj_t* backButton = createButton(topbar, LV_SYMBOL_LEFT, 75, 75, &lv_font_montserrat_32, [](lv_event_t* e) {
+        postUIEvent({UIEventId::Back});
+    }, nullptr);
+
+    lv_obj_t* settingsButton = createButton(topbar, LV_SYMBOL_SETTINGS, 75, 75, &lv_font_montserrat_32, [](lv_event_t* e) {
+        postUIEvent({UIEventId::SwitchScreen, static_cast<int>(ScreenId::Settings)});
+    }, nullptr);
+
+    return topbar;
+}
+
+void updateTopbar(lv_obj_t* topbar, ScreenId id) {
+    auto needs_topbar = std::find_if(screens_that_need_global_topbar.begin(), screens_that_need_global_topbar.end(), [id](ScreenId screenId) {
+        return screenId == id;
+    });
+    if (needs_topbar != screens_that_need_global_topbar.end()) {
+        lv_obj_remove_flag(topbar, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_move_foreground(topbar);
+    } else {
+        lv_obj_add_flag(topbar, LV_OBJ_FLAG_HIDDEN);
+    }
+};
 
 void ScreenManager::init() {
 
@@ -11,9 +54,11 @@ void ScreenManager::init() {
     lv_obj_set_style_radius(root, 0, 0);
     lv_obj_set_style_pad_all(root, 0, 0);
     lv_obj_remove_flag(root, LV_OBJ_FLAG_SCROLLABLE);
+
     logDebug("Creating screens...", "UI");
     for (auto i = 0; i < screenCount; i++) {
         lv_obj_t* screenRoot = lv_obj_create(root);
+        lv_obj_set_pos(screenRoot, 0, 0);
         lv_obj_set_size(screenRoot, LV_PCT(100), LV_PCT(100));
         lv_obj_set_style_border_width(screenRoot, 0, 0);
         lv_obj_set_style_radius(screenRoot, 0, 0);
@@ -23,6 +68,11 @@ void ScreenManager::init() {
         screenTable[i]->create(screenRoot);
         screenTable[i]->hide();
     }
+
+    // Topbar
+    topbar = createTopbar(root);
+    lv_obj_add_flag(topbar, LV_OBJ_FLAG_HIDDEN);
+
     screenTable[toIndex(screenStack[stackPointer])]->show();
     lv_screen_load(root);
     logInfo("ScreenManager initialized", "UI");
@@ -31,6 +81,8 @@ void ScreenManager::init() {
 void ScreenManager::set(ScreenId id) {
     if (id == screenStack[stackPointer]) return;
     if (toIndex(id) >= screenCount) return;
+
+    updateTopbar(topbar, id);
 
     for (int i = stackPointer; i >= 0; i--) {
         if (screenStack[i] == id) {
@@ -49,6 +101,8 @@ void ScreenManager::set(ScreenId id) {
 void ScreenManager::set(ScreenId id, const AppState& appState) {
     if (id == screenStack[stackPointer]) return;
     if (toIndex(id) >= screenCount) return;
+
+    updateTopbar(topbar, id);
 
     for (int i = stackPointer; i >= 0; i--) {
         if (screenStack[i] == id) {
@@ -72,6 +126,7 @@ void ScreenManager::back() {
     if (stackPointer == 0) return;
     screenTable[toIndex(screenStack[stackPointer])]->hide();
     stackPointer--;
+    updateTopbar(topbar, screenStack[stackPointer]);
     screenTable[toIndex(screenStack[stackPointer])]->show();
 }
 

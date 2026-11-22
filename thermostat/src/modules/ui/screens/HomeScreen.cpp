@@ -2,6 +2,7 @@
 #include "modules/ui/ui_events.h"
 #include "lvgl/lvgl.h"
 #include "utils/formatting.h"
+#include "utils/ui_prefabs.h"
 
 extern "C" {
 extern const lv_font_t ui_font_montserrat_240;
@@ -56,37 +57,21 @@ void HomeScreen::create(lv_obj_t* root) {
 
     lv_obj_t* topbar = lv_obj_create(content);
     lv_obj_set_size(topbar, LV_PCT(100), 75);
-    lv_obj_set_style_pad_all(topbar, 5, 0);
+    lv_obj_set_style_pad_all(topbar, 0, 0);
     lv_obj_set_style_bg_opa(topbar, LV_OPA_TRANSP, 0);
     lv_obj_set_style_border_width(topbar, 0, 0);
     lv_obj_set_style_radius(topbar, 0, 0);
     lv_obj_remove_flag(topbar, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_align(topbar, LV_ALIGN_TOP_MID, 0, 0);
 
-    menuButton = lv_button_create(topbar);
-    lv_obj_set_size(menuButton, 100, 50);
-    lv_obj_set_style_bg_opa(menuButton, LV_OPA_TRANSP, 0);
-    lv_obj_set_style_shadow_width(menuButton, 0, 0);
-    lv_obj_align(menuButton, LV_ALIGN_RIGHT_MID, 0, 0);
-    lv_obj_add_event_cb(menuButton, onmenuButtonClicked, LV_EVENT_CLICKED, nullptr);
-
-    lv_obj_t* menuLabel = lv_label_create(menuButton);
+    lv_obj_t* menuLabel = nullptr;
+    menuButton = createButton(topbar, LV_SYMBOL_BARS, 75, 75, &lv_font_montserrat_32, onmenuButtonClicked, nullptr, &menuLabel);
     lv_obj_set_style_text_color(menuLabel, lv_color_hex(COLOR_TEXT_MAIN), 0);
-    lv_obj_set_style_text_font(menuLabel, &lv_font_montserrat_24, 0);
-    lv_obj_center(menuLabel);
-    lv_label_set_text_static(menuLabel, "Menu");
+    lv_obj_align(menuButton, LV_ALIGN_RIGHT_MID, 0, 0);
 
-    hvacModeButton = lv_button_create(topbar);
-    lv_obj_set_size(hvacModeButton, 100, 50);
-    lv_obj_set_style_bg_opa(hvacModeButton, LV_OPA_TRANSP, 0);
-    lv_obj_set_style_shadow_width(hvacModeButton, 0, 0);
-    lv_obj_align(hvacModeButton, LV_ALIGN_CENTER, 0, 0);
-    lv_obj_add_event_cb(hvacModeButton, onhvacModeButtonClicked, LV_EVENT_CLICKED, nullptr);
-
-    modeLabel = lv_label_create(hvacModeButton);
+    hvacModeButton = createButton(topbar, "AUTO", 100, 50, &lv_font_montserrat_24, onhvacModeButtonClicked, nullptr, &modeLabel);
     lv_obj_set_style_text_color(modeLabel, lv_color_hex(COLOR_TEXT_MAIN), 0);
-    lv_obj_set_style_text_font(modeLabel, &lv_font_montserrat_24, 0);
-    lv_label_set_text_static(modeLabel, "AUTO");
+    lv_obj_align(hvacModeButton, LV_ALIGN_CENTER, 0, 0);
 
     tempLabel = lv_label_create(content);
     lv_obj_set_pos(tempLabel, 0, 535);
@@ -143,33 +128,19 @@ void HomeScreen::create(lv_obj_t* root) {
         LV_FLEX_ALIGN_CENTER
     );
 
-    heatSetpointButton = lv_button_create(setpointContainer);
-    lv_obj_set_size(heatSetpointButton, 150, 70);
-    lv_obj_set_style_bg_opa(heatSetpointButton, LV_OPA_TRANSP, 0);
+    heatSetpointButton = createButton(setpointContainer, "20", 150, 70, &lv_font_montserrat_32, onheatSetpointButtonClicked, this, &heatLabel);
     lv_obj_set_style_border_width(heatSetpointButton, 3, 0);
     lv_obj_set_style_border_color(heatSetpointButton, lv_color_hex(COLOR_HEATING), 0);
-    lv_obj_add_event_cb(heatSetpointButton, onheatSetpointButtonClicked, LV_EVENT_CLICKED, this);
-
-    heatLabel = lv_label_create(heatSetpointButton);
     lv_obj_set_style_text_color(heatLabel, lv_color_hex(COLOR_HEATING), 0);
-    lv_obj_set_style_text_font(heatLabel, &lv_font_montserrat_32, 0);
     lv_obj_set_style_align(heatLabel, LV_ALIGN_CENTER, 0);
     lv_obj_set_style_text_align(heatLabel, LV_TEXT_ALIGN_CENTER, 0);
-    lv_label_set_text_static(heatLabel, "20");
 
-    coolSetpointButton = lv_button_create(setpointContainer);
-    lv_obj_set_size(coolSetpointButton, 150, 70);
-    lv_obj_set_style_bg_opa(coolSetpointButton, LV_OPA_TRANSP, 0);
+    coolSetpointButton = createButton(setpointContainer, "24", 150, 70, &lv_font_montserrat_32, oncoolSetpointButtonClicked, this, &coolLabel);
     lv_obj_set_style_border_width(coolSetpointButton, 3, 0);
     lv_obj_set_style_border_color(coolSetpointButton, lv_color_hex(COLOR_COOLING), 0);
-    lv_obj_add_event_cb(coolSetpointButton, oncoolSetpointButtonClicked, LV_EVENT_CLICKED, this);
-
-    coolLabel = lv_label_create(coolSetpointButton);
     lv_obj_set_style_text_color(coolLabel, lv_color_hex(COLOR_COOLING), 0);
-    lv_obj_set_style_text_font(coolLabel, &lv_font_montserrat_32, 0);
     lv_obj_set_style_align(coolLabel, LV_ALIGN_CENTER, 0);
     lv_obj_set_style_text_align(coolLabel, LV_TEXT_ALIGN_CENTER, 0);
-    lv_label_set_text_static(coolLabel, "24");
 
     border = lv_obj_create(container);
     lv_obj_set_pos(border, -10, -10);
