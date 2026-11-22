@@ -43,6 +43,7 @@ else
   # shellcheck disable=SC1090
   source "${YOCTO_SETUP}" "${YOCTO_BUILD_DIR}"
   set -euo pipefail
+  bitbake -c cleansstate thermostat
   bitbake -c install thermostat
   INSTALL_DIR="$(bitbake -e thermostat | sed -n 's/^D="\(.*\)"$/\1/p')"
   if [[ -z "${INSTALL_DIR}" || ! -f "${INSTALL_DIR}/usr/bin/Thermostat" ]]; then
