@@ -8,7 +8,4 @@ public:
     void show() override;
     void hide() override;
     void update(const AppState& appState) override;
-private:
-    lv_obj_t* iaqLabel = nullptr;
-    lv_obj_t* backButton = nullptr;
 };
