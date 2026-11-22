@@ -1,6 +1,6 @@
 #include "modules/ui/screens/SettingsScreen.h"
 #include "modules/ui/ui_events.h"
-#include "utils/ui_prefabs.h"
+#include "utils/uiPrefabs.h"
 #include <iomanip>
 #include <sstream>
 #include <string>
@@ -67,6 +67,4 @@ void SettingsScreen::hide() {
     lv_obj_add_flag(container, LV_OBJ_FLAG_HIDDEN);
 }
 
-void SettingsScreen::update(const AppState& appState) {
-    
-}
+void SettingsScreen::update(const AppState& appState) {}

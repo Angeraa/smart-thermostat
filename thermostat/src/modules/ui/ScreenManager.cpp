@@ -1,7 +1,7 @@
 #include "modules/ui/ScreenManager.h"
 #include "modules/ui/screenRegistry.h"
 #include "utils/logging.h"
-#include "utils/ui_prefabs.h"
+#include "utils/uiPrefabs.h"
 #include "modules/ui/ui_events.h"
 #include <algorithm>
 

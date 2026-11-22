@@ -1,6 +1,6 @@
 #include "modules/ui/screens/HvacModeSelectScreen.h"
 #include "modules/ui/ui_events.h"
-#include "utils/ui_prefabs.h"
+#include "utils/uiPrefabs.h"
 
 void onAutoButtonClick(lv_event_t *e) {
     postUIEvent({UIEventId::HvacModeChanged, static_cast<int>(HvacMode::AUTO)});

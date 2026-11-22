@@ -2,7 +2,7 @@
 #include "modules/ui/ui_events.h"
 #include "lvgl/lvgl.h"
 #include "utils/formatting.h"
-#include "utils/ui_prefabs.h"
+#include "utils/uiPrefabs.h"
 
 extern "C" {
 extern const lv_font_t ui_font_montserrat_240;
