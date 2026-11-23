@@ -161,3 +161,36 @@ void ScreenManager::setpointSelected(int temperature) {
     }
     back();
 }
+
+void ScreenManager::openItemSelectorDialog(const UIEvent& e) {
+    if (e.id != UIEventId::OpenItemSelectorDialog) return;
+    if (!e.callback) {
+        logError("No callback provided for OpenItemSelectorDialog event", "UI");
+        return;
+    }
+    if (!e.context) {
+        logError("No context provided for OpenItemSelectorDialog event", "UI");
+        return;
+    }
+    if (!e.options || e.optionCount == 0) {
+        logError("No options provided for OpenItemSelectorDialog event", "UI");
+        return;
+    }
+    eventCallback = e.callback;
+    eventContext = e.context;
+    static_cast<ItemSelectorScreen*>(screenTable[toIndex(ScreenId::ItemSelector)])
+        ->configure(e.title, e.options, e.optionCount, e.value);
+    set(ScreenId::ItemSelector);
+}
+
+void ScreenManager::itemSelectorSelected(int value) {
+    auto callback = eventCallback;
+    auto context = eventContext;
+
+    eventCallback = nullptr;
+    eventContext = nullptr;
+    if (callback && context) {
+        callback(context, value);
+    }
+    back();
+}

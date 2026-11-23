@@ -11,6 +11,7 @@ public:
 
     int getHeatSetpoint() const { return heatSetpoint; }
     int getCoolSetpoint() const { return coolSetpoint; }
+    int getHvacMode() const { return static_cast<int>(hvacMode); }
 private:
     lv_obj_t* border = nullptr;
 
@@ -28,5 +29,6 @@ private:
     lv_obj_t* coolLabel = nullptr;
     int heatSetpoint = 225;
     int coolSetpoint = 240;
+    HvacMode hvacMode = HvacMode::AUTO;
 
 };

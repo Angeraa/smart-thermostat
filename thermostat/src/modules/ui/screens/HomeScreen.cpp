@@ -20,8 +20,27 @@ static void onmenuButtonClicked(lv_event_t*) {
     postUIEvent({UIEventId::SwitchScreen, static_cast<int>(ScreenId::Settings)});
 }
 
-static void onhvacModeButtonClicked(lv_event_t*) {
-    postUIEvent({UIEventId::SwitchScreen, static_cast<int>(ScreenId::HvacModeSelect)});
+void hvacModeCallback(void*, int newMode) {
+    postUIEvent({UIEventId::HvacModeChanged, newMode});
+}
+
+static void onhvacModeButtonClicked(lv_event_t* e) {
+    static const ItemSelectorOption hvacModes[] = {
+        {"Auto", static_cast<int>(HvacMode::AUTO)},
+        {"Heat", static_cast<int>(HvacMode::HEAT)},
+        {"Cool", static_cast<int>(HvacMode::COOL)},
+        {"Off", static_cast<int>(HvacMode::OFF)}
+    };
+    HomeScreen* screen = static_cast<HomeScreen*>(lv_event_get_user_data(e));
+    postUIEvent({
+        UIEventId::OpenItemSelectorDialog,
+        screen->getHvacMode(),
+        hvacModeCallback,
+        screen,
+        "HVAC Mode",
+        hvacModes,
+        4
+    });
 }
 
 static void onheatSetpointButtonClicked(lv_event_t* e) {
@@ -69,7 +88,7 @@ void HomeScreen::create(lv_obj_t* root) {
     lv_obj_set_style_text_color(menuLabel, lv_color_hex(COLOR_TEXT_MAIN), 0);
     lv_obj_align(menuButton, LV_ALIGN_RIGHT_MID, 0, 0);
 
-    hvacModeButton = createButton(topbar, "AUTO", 100, 50, &lv_font_montserrat_24, onhvacModeButtonClicked, nullptr, &modeLabel);
+    hvacModeButton = createButton(topbar, "AUTO", 100, 50, &lv_font_montserrat_24, onhvacModeButtonClicked, this, &modeLabel);
     lv_obj_set_style_text_color(modeLabel, lv_color_hex(COLOR_TEXT_MAIN), 0);
     lv_obj_align(hvacModeButton, LV_ALIGN_CENTER, 0, 0);
 
@@ -166,6 +185,7 @@ void HomeScreen::hide() {
 void HomeScreen::update(const AppState& appState) {
     heatSetpoint = appState.heatSetpoint;
     coolSetpoint = appState.coolSetpoint;
+    hvacMode = appState.mode;
     lv_label_set_text(tempLabel, formatTemperature(appState.currTemp).c_str());
     lv_label_set_text(humidityLabel, formatHumidity(appState.currHum).c_str());
     lv_label_set_text(pressureLabel, formatPressure(appState.currPressure).c_str());

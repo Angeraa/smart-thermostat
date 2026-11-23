@@ -3,13 +3,13 @@
 static HomeScreen homeScreen;
 static SettingsScreen settingsScreen;
 static SetpointScreen setpointScreen;
-static HvacModeSelectScreen hvacModeSelectScreen;
+static ItemSelectorScreen itemSelectorScreen;
 
 const std::array<Screen*, static_cast<size_t>(ScreenId::Count)> screenTable = {
     &homeScreen,
     &settingsScreen,
     &setpointScreen,
-    &hvacModeSelectScreen
+    &itemSelectorScreen
 };
 
 const std::array<ScreenId, 1> screens_that_need_global_topbar = {

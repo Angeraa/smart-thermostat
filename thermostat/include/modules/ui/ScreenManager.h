@@ -17,6 +17,8 @@ protected:
     friend class UIThread;
     void openSetpointDialog(const UIEvent& e);
     void setpointSelected(int temperature);
+    void openItemSelectorDialog(const UIEvent& e);
+    void itemSelectorSelected(int value);
 
     UIEventCallback eventCallback = nullptr;
     void* eventContext = nullptr;

@@ -243,6 +243,14 @@ void UIThread::run() {
                     screenManager.setpointSelected(event.value);
                     break;
                 }
+                case UIEventId::OpenItemSelectorDialog: {
+                    screenManager.openItemSelectorDialog(event);
+                    break;
+                }
+                case UIEventId::ItemSelectorSelected: {
+                    screenManager.itemSelectorSelected(event.value);
+                    break;
+                }
                 case UIEventId::Back: {
                     screenManager.back();
                     break;
